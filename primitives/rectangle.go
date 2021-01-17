@@ -52,12 +52,12 @@ func (r *rectangle) Draw() {
 
 func (r *rectangle) Init() {
 
-	vertexShader, err := shaders.Compile("shaders/simpleVertex.vs", gl.VERTEX_SHADER)
+	vertexShader, err := shaders.Compile("shaders/examples/simpleVertex.vs", gl.VERTEX_SHADER)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fragmentShader, err := shaders.Compile("shaders/simpleFragment.fs", gl.FRAGMENT_SHADER)
+	fragmentShader, err := shaders.Compile("shaders/examples/simpleFragment.fs", gl.FRAGMENT_SHADER)
 	if err != nil {
 		log.Fatal(err)
 	}

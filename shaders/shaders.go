@@ -15,7 +15,7 @@ func Compile(source string, shaderType uint32) (uint32, error) {
 	if err != nil {
 		return 0, fmt.Errorf("Error: %s", err)
 	}
-	csource, free := gl.Strs(string(content))
+	csource, free := gl.Strs(string(content) + "\x00")
 	gl.ShaderSource(shader, 1, csource, nil)
 	free()
 	gl.CompileShader(shader)

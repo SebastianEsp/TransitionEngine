@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/go-gl/gl/v4.6-core/gl"
+	"github.com/go-gl/glfw/v3.3/glfw"
+	"maze.io/x/math32"
 )
 
 type triangle struct {
@@ -39,18 +41,24 @@ func (t *triangle) GetVertices() []float32 {
 
 func (t *triangle) Draw() {
 	gl.UseProgram(t.shaderProgram)
+
+	var timeValue float32 = float32(glfw.GetTime())
+	var greenValue float32 = math32.Sin(timeValue)/2.0 + 0.5
+	vertexColorLocation := gl.GetUniformLocation(t.shaderProgram, gl.Str("ourColor\x00"))
+	gl.Uniform4f(vertexColorLocation, 0.0, greenValue, 0.0, 1.0)
+
 	gl.BindVertexArray(t.vao)
 	gl.DrawArrays(gl.TRIANGLES, 0, 3)
 }
 
 func (t *triangle) Init() {
 
-	vertexShader, err := shaders.Compile("shaders/uniformVertex.vs", gl.VERTEX_SHADER)
+	vertexShader, err := shaders.Compile("shaders/examples/rainbowVertex.vs", gl.VERTEX_SHADER)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fragmentShader, err := shaders.Compile("shaders/uniformFragment.fs", gl.FRAGMENT_SHADER)
+	fragmentShader, err := shaders.Compile("shaders/examples/rainbowFragment.fs", gl.FRAGMENT_SHADER)
 	if err != nil {
 		log.Fatal(err)
 	}
