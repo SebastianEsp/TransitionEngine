@@ -2,6 +2,7 @@ package primitives
 
 import (
 	"chaoticneutraltech/transition/shaders"
+	"chaoticneutraltech/transition/textures"
 	"log"
 
 	"github.com/go-gl/gl/v4.6-core/gl"
@@ -14,15 +15,17 @@ type rectangle struct {
 	vao           uint32
 	ebo           uint32
 	shaderProgram uint32
+	texture       uint32
 }
 
 func NewRectangle() *rectangle {
 	r := new(rectangle)
 	r.vertices = []float32{
-		0.5, 0.5, 0.0, // top right
-		0.5, -0.5, 0.0, // bottom right
-		-0.5, -0.5, 0.0, // bottom left
-		-0.5, 0.5, 0.0, // top left
+		// positions          // colors           // texture coords
+		0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, // top right
+		0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, // bottom right
+		-0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, // bottom left
+		-0.5, 0.5, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, // top left
 	}
 	r.indices = []uint32{
 		0, 1, 2,
@@ -45,6 +48,9 @@ func (r *rectangle) GetVertices() []float32 {
 }
 
 func (r *rectangle) Draw() {
+
+	gl.BindTexture(gl.TEXTURE_2D, r.texture)
+
 	gl.UseProgram(r.shaderProgram)
 	gl.BindVertexArray(r.vao)
 	gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, gl.PtrOffset(0))
@@ -52,12 +58,12 @@ func (r *rectangle) Draw() {
 
 func (r *rectangle) Init() {
 
-	vertexShader, err := shaders.Compile("shaders/examples/simpleVertex.vs", gl.VERTEX_SHADER)
+	vertexShader, err := shaders.Compile("shaders/examples/textureVertex.vs", gl.VERTEX_SHADER)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fragmentShader, err := shaders.Compile("shaders/examples/simpleFragment.fs", gl.FRAGMENT_SHADER)
+	fragmentShader, err := shaders.Compile("shaders/examples/textureFragment.fs", gl.FRAGMENT_SHADER)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -79,8 +85,28 @@ func (r *rectangle) Init() {
 	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, r.ebo)
 	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, 4*len(r.indices), gl.Ptr(r.indices), gl.STATIC_DRAW)
 
-	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 3*4, nil)
+	//Postion
+	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 8*4, gl.PtrOffset(0))
 	gl.EnableVertexAttribArray(0)
+
+	//Color
+	gl.VertexAttribPointer(1, 3, gl.FLOAT, false, 8*4, gl.PtrOffset(3*4))
+	gl.EnableVertexAttribArray(1)
+
+	//Texture
+	gl.VertexAttribPointer(2, 2, gl.FLOAT, false, 8*4, gl.PtrOffset(6*4))
+	gl.EnableVertexAttribArray(2)
+
+	texture, err := textures.NewTexture("textures/container.jpg", textures.Jpg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	texture.GetTextureDimensions()
+
+	//fmt.Println(texture.GetTextureBytes())
+
+	r.texture = texture.GenerateGlTexture()
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 	gl.BindVertexArray(0)

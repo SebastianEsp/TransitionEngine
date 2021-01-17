@@ -11,6 +11,7 @@ import (
 
 type triangle struct {
 	vertices      []float32
+	texCoords     []float32
 	vbo           uint32
 	vao           uint32
 	shaderProgram uint32
@@ -23,6 +24,11 @@ func NewTriangle() *triangle {
 		0.5, -0.5, 0.0, 1.0, 0.0, 0.0, // bottom right
 		-0.5, -0.5, 0.0, 0.0, 1.0, 0.0, // bottom left
 		0.0, 0.5, 0.0, 0.0, 0.0, 1.0, // top
+	}
+	t.texCoords = []float32{
+		0.0, 0.0, // lower-left corner
+		1.0, 0.0, // lower-right corner
+		0.5, 1.0, // top-center corner
 	}
 	t.vbo = 0
 	t.vao = 0

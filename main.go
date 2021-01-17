@@ -52,11 +52,11 @@ func main() {
 	//gl.Enable(gl.DEPTH_TEST)
 	//gl.DepthFunc(gl.LESS)
 
-	var triangle = primitives.NewTriangle()
-	triangle.Init()
+	//var triangle = primitives.NewTriangle()
+	//triangle.Init()
 
-	//var rectangle = primitives.NewRectangle()
-	//rectangle.Init()
+	var rectangle = primitives.NewRectangle()
+	rectangle.Init()
 
 	for !window.ShouldClose() {
 
@@ -69,8 +69,8 @@ func main() {
 		gl.ClearColor(0.2, 0.3, 0.3, 1.0)
 		gl.Clear(gl.COLOR_BUFFER_BIT)
 
-		triangle.Draw()
-		//rectangle.Draw()
+		//triangle.Draw()
+		rectangle.Draw()
 
 		// Maintenance
 		window.SwapBuffers()
