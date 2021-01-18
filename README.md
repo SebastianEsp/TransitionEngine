@@ -1,7 +1,7 @@
 # TransitionEngine
 
 ## Roadmap
-- [x] Windows manager
+- [] Window manager
 - [ ] Shaders
   - [x] Triangles
   - [x] Squares
