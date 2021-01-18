@@ -2,7 +2,7 @@
 
 ## Roadmap
 - [x] Windows manager
-- [] Shaders
-- [] Sprite loader
-- [] Primitives
-- []
+- [ ] Shaders
+- [ ] Sprite loader
+- [ ] Primitives
+- [ ]
