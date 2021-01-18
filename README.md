@@ -1,7 +1,7 @@
 # TransitionEngine
 
 ## Roadmap
-- [] Window manager
+- [ ] Window manager
 - [ ] Shaders
 - [ ] Sprite loader
 - [ ] Primitives
